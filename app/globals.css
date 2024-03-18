@@ -13,3 +13,9 @@
     @apply text-3xl font-semibold;
   }
 }
+
+@layer components {
+  .primary-btn {
+    @apply w-full bg-orange-500 text-white text-lg font-medium rounded-md text-center hover:bg-orange-400 transition-colors;
+  }
+}
