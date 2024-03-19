@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { ChatBubbleOvalLeftEllipsisIcon } from '@heroicons/react/24/solid';
+import FormInput from '@/components/form-input';
+import FormButton from '@/components/form-btn';
 
 export default function Home() {
   return (
@@ -9,16 +11,21 @@ export default function Home() {
         <h2 className="text-xl">Fill in the form below to join!</h2>
       </div>
       <form className="flex flex-col gap-3">
-        <div className="flex flex-col gap-2">
-          <input
-            className="bg-transparent rounded-md w-full h-10 focus:outline-none ring-1 focus:ring-2 ring-neutral-200 focus:ring-orange-500 border-none placeholder:accent-neutral-400"
-            type="text"
-            placeholder="Username"
-            required={true}
-          />
-          <span className="text-red-500 font-medium">Input error</span>
-        </div>
-        <button className="primary-btn h-10">Create account</button>
+        <FormInput type="text" placeholder="Username" required errors={[]} />
+        <FormInput type="email" placeholder="Email" required errors={[]} />
+        <FormInput
+          type="password"
+          placeholder="Password"
+          required
+          errors={[]}
+        />
+        <FormInput
+          type="password"
+          placeholder="Confirm Password"
+          required
+          errors={[]}
+        />
+        <FormButton loading={false} text="Create account" />
       </form>
       <div className="w-full h-px bg-neutral-500" />
       <div>
