@@ -5,6 +5,7 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
 } from '@/lib/constants';
+import db from '@/lib/db';
 
 const checkUsername = (username: string) => !username.includes('potato');
 const checkPasswords = ({
@@ -24,7 +25,7 @@ const formSchema = z
       })
       .trim()
       .toLowerCase()
-      .transform((username) => `🔥 ${username}`)
+      // .transform((username) => `🔥 ${username}`)
       .refine(checkUsername, 'No potatos allowed!'),
     email: z.string().email().toLowerCase(),
     password: z
@@ -51,6 +52,36 @@ export async function createAccount(prevState: any, formData: FormData) {
   if (!result.success) {
     return result.error.flatten();
   } else {
-    console.log(result.data);
+    const user = await db.user.findUnique({
+      where: {
+        username: result.data.username,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (user) {
+      // chow an error
+    }
+
+    const userEmail = await db.user.findUnique({
+      where: {
+        email: result.data.email,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (user) {
+      // show an error to the user
+    }
+
+    // check if the email is already used
+    // hash password
+    // save the user to db
+    // log the user in
+    // redirect "/home"
   }
 }
