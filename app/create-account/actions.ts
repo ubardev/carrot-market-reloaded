@@ -104,14 +104,14 @@ export async function createAccount(prevState: any, formData: FormData) {
       },
     });
 
-    const cookie = await getIronSession(cookies(), {
+    const session = await getIronSession(cookies(), {
       cookieName: 'delicious-karrot',
       password: process.env.COOKIE_PASSWORD!,
     });
 
     //@ts-ignore
     cookie.id = user.id;
-    await cookie.save();
+    await session.save();
     redirect('/profile');
   }
 }
