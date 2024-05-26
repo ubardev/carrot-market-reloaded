@@ -7,6 +7,7 @@ import {
   PASSWORD_REGEX,
   PASSWORD_REGEX_ERROR,
 } from '@/lib/constants';
+import bcrypt from 'bcrypt';
 
 const checkEmailExists = async (email: string) => {
   const user = await db.user.findUnique({
@@ -44,6 +45,19 @@ export async function login(prevState: any, formData: FormData) {
     return result.error.flatten();
   } else {
     // if the user is found, check password hash
+    const user = await db.user.findUnique({
+      where: {
+        email: result.data.email,
+      },
+      select: {
+        password: true,
+      },
+    });
+
+    const ok = await bcrypt.compare(result.data.password, user!.password ?? '');
+
+    console.log('ok ==========>', ok);
+
     // log the user in
     // redirect "/profile"
   }
