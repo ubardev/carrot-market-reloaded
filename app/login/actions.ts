@@ -8,6 +8,8 @@ import {
   PASSWORD_REGEX_ERROR,
 } from '@/lib/constants';
 import bcrypt from 'bcrypt';
+import getSession from '@/lib/session';
+import { redirect } from 'next/navigation';
 
 const checkEmailExists = async (email: string) => {
   const user = await db.user.findUnique({
@@ -50,13 +52,25 @@ export async function login(prevState: any, formData: FormData) {
         email: result.data.email,
       },
       select: {
+        id: true,
         password: true,
       },
     });
 
     const ok = await bcrypt.compare(result.data.password, user!.password ?? '');
 
-    console.log('ok ==========>', ok);
+    if (ok) {
+      const session = await getSession();
+      session.id = user!.id;
+      redirect('/profile');
+    } else {
+      return {
+        fieldErrors: {
+          password: ['Wrong password.'],
+          email: [],
+        },
+      };
+    }
 
     // log the user in
     // redirect "/profile"
